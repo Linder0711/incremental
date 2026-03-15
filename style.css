@@ -305,3 +305,13 @@ button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
+@media (max-width: 600px) {
+  .generator-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .generator-grid button {
+    width: 100%;
+  }
+}
