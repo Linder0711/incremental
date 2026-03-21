@@ -8,110 +8,33 @@
   <script defer src="script.js"></script>
 </head>
 <body>
-  <!-- Cash -->
+  <!-- this cash and games won display -->
    <H1>Buy 10,000 10s to win</H1>
 <h2>Cash</h2>
 <h1 id="cash">0</h1>
 <h2>Games won</h2>
 <h1 id="gameswon">0</h1>
 
+<!-- this is new today, looks poo right now. don't care -->
+ <div id="button-area">
+   <button id="buy1">1</button>
+   <button id="buy10">10</button>
+   <button id="buy100">100</button>
+   <button id="buy1000">1,000</button>
+  </div>
+
+<!--main table-->
 <div class="generator-grid header-row">
   <div>Generator Level</div>
   <div>Number Owned</div>
   <div>Cash Per Click</div>
-  <div>Buy 1</div>
-  <div>Buy 10</div>
+  <div>Buy</div>
   <div>Automate</div>
 </div>
-<!-- 1 -->
-<div class="generator-grid">
-  <div>1s</div>
-  <div id="oneown">1</div>
-  <button id="genone">1</button>
-  <button id="buyone">10</button>
-  <button id="buytenone">145</button>
-  <button id="autooneactive">100</button>
-</div>
-<!-- 2 -->
-<div class="generator-grid">
-  <div>2s</div>
-  <div id="twoown">0</div>
-  <button id="gentwo">0</button>
-  <button id="buytwo">50</button>
-  <button id="buytentwo">725</button>
-  <button id="autotwoactive">500</button>
-</div>
-<!-- 3 -->
-<div class="generator-grid">
-  <div>3s</div>
-  <div id="threeown">0</div>
-  <button id="genthree">0</button>
-  <button id="buythree">250</button>
-  <button id="buytenthree">3,625</button>
-  <button id="autothreeactive">2,500</button>
-</div>
-<div class="generator-grid">
-  <div>4s</div>
-  <div id="fourown">0</div>
-  <button id="genfour">0</button>
-  <button id="buyfour">1,250</button>
-  <button id="buytenfour">18,125</button>
-  <button id="autofouractive">12,500</button>
-</div>
-<!-- 5 -->
-<div class="generator-grid">
-  <div>5s</div>
-  <div id="fiveown">0</div>
-  <button id="genfive">0</button>
-  <button id="buyfive">6,250</button>
-  <button id="buytenfive">90,625</button>
-  <button id="autofiveactive">62,500</button>
-</div>
-<!-- 6 -->
-<div class="generator-grid">
-  <div>6s</div>
-  <div id="sixown">0</div>
-  <button id="gensix">0</button>
-  <button id="buysix">31,250</button>
-  <button id="buytensix">453,125</button>
-  <button id="autosixactive">312,500</button>
-</div>
-<!-- 7 -->
-<div class="generator-grid">
-  <div>7s</div>
-  <div id="sevenown">0</div>
-  <button id="genseven">0</button>
-  <button id="buyseven">156,250</button>
-  <button id="buytenseven">2,265,625</button>
-  <button id="autosevenactive">1,562,500</button>
-</div>
-<!-- 8 -->
-<div class="generator-grid">
-  <div>8s</div>
-  <div id="eightown">0</div>
-  <button id="geneight">0</button>
-  <button id="buyeight">781,250</button>
-  <button id="buyteneight">11,328,125</button>
-  <button id="autoeightactive">7,812,500</button>
-</div>
-<!-- 9 -->
-<div class="generator-grid">
-  <div>9s</div>
-  <div id="nineown">0</div>
-  <button id="gennine">0</button>
-  <button id="buynine">3,906,250</button>
-  <button id="buytennine">56,640,652</button>
-  <button id="autonineactive">39,062,500</button>
-</div>
-<!-- 10 -->
-<div class="generator-grid">
-  <div>10s</div>
-  <div id="tenown">0</div>
-  <button id="genten">0</button>
-  <button id="buyten">19,531,250</button>
-  <button id="buytenten">283,203,125</button>
-  <button id="autotenactive">195,312,500</button>
-</div>
+<!--Generated from script-->
+<div id="generator-area"></div>
+
+<!--do I need this?-->
 <button id="reset">Reset</button>
 </body>
 </html>
