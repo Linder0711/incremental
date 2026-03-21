@@ -98,10 +98,11 @@ const multipliers = [
 ];
 //This function sets the income and speed multipliers when generating cash and applying cooldowns
 //it works by looking at the owned level of the previous generator.
+
 function setmultipliers() {
-  gen.incmult = 1;
-  gen.speedmult = 1;
   generators.forEach((gen, index) => {
+    gen.incmult = 1;
+  gen.speedmult = 1;
     if (index === 0) return;
     const prevGen = generators[index - 1];
     multipliers.forEach(mult => {
