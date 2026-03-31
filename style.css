@@ -1,317 +1,127 @@
-/* =========================================================
-   GLOBAL BASE – dark futuristic neon theme
-   ========================================================= */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+body{
+  background-color: #e5e5f74e;
+  background-image: radial-gradient(circle at center center, #060715, #050505), 
+  repeating-radial-gradient(circle at center center,#3a3a4f, #1f1f2e, 10px, 
+  transparent 20px, transparent 10px); 
+  background-blend-mode: multiply;
+  color:aliceblue;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-weight: bold;
 }
+.main-ui {
+  background: rgba(20, 20, 40, 0.536);
+  backdrop-filter: blur(6px); /* optional but sexy */
+  border-radius: 20px;
+  padding: 20px;
+}
+button {
+  border: none;
+  border-radius: 40px;
+  padding: 12px 28px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  background: linear-gradient(
+    to bottom,
+    #ff4d4d,
+    #cc0000,
+    #990000
+  );
+  box-shadow:
+    0 6px 10px rgba(0,0,0,0.25),
+    inset 0 2px 4px rgba(255,255,255,0.4),
+    inset 0 -4px 6px rgba(0,0,0,0.2);
+  transition: all 0.15s ease;
+}
+button:disabled {
+  cursor: not-allowed;
 
-html, body {
-  height: 100%;
-  width: 100%;
-  font-family: 'Orbitron', sans-serif;
-  background: radial-gradient(circle at center, #020024 0%, #000000 100%);
-  color: #00eaff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 20px;
-  line-height: 1.5;
+  /* Kill the strong red */
+  background: linear-gradient(
+    to bottom,
+    #555,
+    #333,
+    #222
+  );
+
+  color: rgba(255,255,255,0.6);
+
+  /* Flatten it slightly */
+  box-shadow:
+    0 3px 6px rgba(0,0,0,0.3),
+    inset 0 1px 2px rgba(255,255,255,0.1),
+    inset 0 -2px 3px rgba(0,0,0,0.4);
+
+  transform: none;
+  filter: grayscale(40%);
+}
+.cash {
   text-align: center;
+  font-size: 56px;
+  letter-spacing: 1px;
+  text-shadow: 0 0 12px rgba(255, 0, 0, 0.7);
+  color: #e81616;
+  font-family: Arial, Helvetica, sans-serif;
+
+}
+h3 {
+  opacity: 0.7;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.won {
+  text-align: center;
+  font-size: 16px;
+  color: #e81616;
+  font-family: Arial, Helvetica, sans-serif;
+}
+#button-area{
+  text-align: right;
+  font-size: 0;
+}
+.btn-mul{
+  text-align: right;
+  padding: 10px;
+  color: #ffffff;
+  margin: 0px;
+  background-color: rgb(55, 55, 55);
+  font-size: 8px;
+  border-color: #e81616;
+  box-shadow: #1a24b9;
+  display: inline-flex;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0);
+  border-radius: 20px;
 }
 
-/* =========================================================
-   HEADERS
-   ========================================================= */
-h1, h2, h3 {
-  letter-spacing: 3px;
-  color: #f200ff;
-  text-shadow: 0 0 8px #ff00f7, 0 0 20px #f700ff;
-  margin-bottom: 20px;
-}
-
-/* =========================================================
-   SCORE + CANVAS AREA
-   ========================================================= */
-.score {
-  font-size: 1.5rem;
-  color: #ff00ff;
-  text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff88;
+.generator-row{
+  display: grid;
+  grid-template-columns: 180px 180px 120px 120px;
+  width: fit-content;
+  gap: 10px;
+  margin: 0 auto;
+  justify-content: center;
+  text-align: center;
   margin-bottom: 10px;
 }
-
-#gameCanvas {
-  width: 400px;
-  height: 400px;
-  background: rgba(0, 10, 20, 0.8);
-  border: 2px solid #00eaff;
-  box-shadow: 0 0 25px #00ffff66, inset 0 0 10px #00ffff33;
-  display: block;
-  margin: 0 auto 15px;
-  image-rendering: pixelated;
+#reset-area{
+  text-align: right;
 }
+.game-container {
+  width: fit-content;
+  margin: 60px auto;
+  padding: 30px;
 
-/* =========================================================
-   BUTTONS
-   ========================================================= */
-button {
-  background: transparent;
-  color: #00eaff;
-  border: 2px solid #fb00ff;
-  border-radius: 6px;
-  padding: 10px 20px;
-  font-size: 1.1rem;
-  letter-spacing: 1px;
-  text-shadow: 0 0 8px #00ffff;
-  box-shadow: 0 0 10px #ee00ff55;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin: 5px;
-}
+  border-radius: 20px;
 
-button:hover {
-  background: #00ffff11;
-  box-shadow: 0 0 20px #00ffffaa;
-}
+  background: rgba(20, 20, 40, 0.85);
 
-button:active {
-  transform: scale(0.97);
-}
+  box-shadow:
+    0 20px 40px rgba(0,0,0,0.5),
+    inset 0 2px 6px rgba(255,255,255,0.1);
 
-/* =========================================================
-   SCORE SUBMISSION MODAL
-   ========================================================= */
-#scoreFormContainer {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.7);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  color: white;
-}
-
-/* =========================================================
-   D-PAD CONTROLS (MOBILE)
-   ========================================================= */
-.controls {
-  display: grid;
-  grid-template-columns: 80px 80px 80px;
-  grid-template-rows: 80px 80px 80px;
-  gap: 8px;
-  margin: 16px auto 0;
-  touch-action: none;
-  user-select: none;
-  align-items: center;
-  justify-content: center;
-  max-width: 260px;
-}
-
-.dir-up    { grid-column: 2; grid-row: 1; }
-.dir-left  { grid-column: 1; grid-row: 2; }
-.dir-right { grid-column: 3; grid-row: 2; }
-.dir-down  { grid-column: 2; grid-row: 3; }
-
-.controls .btn {
-  font-size: 28px;
-  border: 2px solid #00eaff;
-  border-radius: 12px;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.4);
-  color: #00eaff;
-  box-shadow: 0 0 8px #00ffff55;
-}
-
-.controls .btn:active { transform: scale(0.95); }
-
-@media (hover: hover) and (pointer: fine) {
-  .controls { display: none; }
-}
-
-/* =========================================================
-   LAYOUT STRUCTURE
-   ========================================================= */
-.game-layout {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 40px;
-  flex-wrap: wrap;
-  margin-top: 20px;
-}
-
-.game-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* =========================================================
-   LEADERBOARD
-   ========================================================= */
-.leaderboard-area {
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 10px;
-  padding: 15px 20px;
-  box-shadow: 0 0 15px #00ffff33, inset 0 0 10px #00ffff22;
-  color: #00eaff;
-  min-width: 220px;
-  max-height: 420px;
-  overflow-y: auto;
-}
-
-.leaderboard-area h2 {
-  text-align: center;
-  margin-top: 0;
-}
-
-.leaderboard-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: monospace;
-}
-
-.leaderboard-table th,
-.leaderboard-table td {
-  border-bottom: 1px solid #00ffff33;
-  padding: 6px 8px;
-  text-align: left;
-}
-
-.leaderboard-table th {
-  background: rgba(0, 255, 255, 0.1);
-  color: #00eaff;
-}
-
-.leaderboard-table tr:nth-child(even) {
-  background-color: rgba(0,255,255,0.05);
-}
-
-/* =========================================================
-   MOBILE ADJUSTMENTS
-   ========================================================= */
-@media (max-width: 700px) {
-  .game-layout {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .leaderboard-area {
-    width: 90%;
-    max-width: 350px;
-    order: 3;
-  }
-
-  .game-area { order: 1; }
-
-  canvas {
-    width: 90vw;
-    height: 90vw;
-    max-width: 400px;
-    max-height: 400px;
-  }
-}
-
-/* =========================================================
-   MOBILE PORTRAIT: SLIDE-UP LEADERBOARD
-   ========================================================= */
-.toggle-leaderboard {
-  display: none;
-  margin-top: 10px;
-  background: transparent;
-  color: #00eaff;
-  border: 2px solid #00eaff;
-  border-radius: 8px;
-  padding: 8px 14px;
-  font-size: 16px;
-  box-shadow: 0 0 10px #00ffff55;
-}
-
-@media (max-width: 700px) and (orientation: portrait) {
-  .toggle-leaderboard { display: inline-block; }
-
-  .leaderboard-area {
-    display: none;
-    position: fixed;
-    bottom: -100%;
-    left: 0; right: 0;
-    background: #000;
-    color: #00eaff;
-    max-height: 70%;
-    overflow-y: auto;
-    border-top: 3px solid #00ffff;
-    border-radius: 10px 10px 0 0;
-    z-index: 50;
-    transition: bottom 0.3s ease-in-out;
-    padding: 10px 15px;
-  }
-
-  .leaderboard-area.active {
-    display: block;
-    bottom: 0;
-  }
-
-  .leaderboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #00ffff55;
-    margin-bottom: 10px;
-  }
-
-  .close-leaderboard {
-    background: none;
-    border: none;
-    color: #00eaff;
-    font-size: 24px;
-    cursor: pointer;
-  }
-
-  .leaderboard-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.9rem;
-  }
-
-  .leaderboard-table th, .leaderboard-table td {
-    border-bottom: 1px solid #00ffff33;
-    padding: 6px 8px;
-  }
-}
-.generator-row {
-  display: grid;
-  grid-template-columns: 180px 180px 180px 180px 180px 180px;
-  align-items: center;
-  gap: 20px;
-  width: 100%;
-  max-width: 900px;
-  margin: 10px auto;
-}
-.generator-grid {
-  display: grid;
-  grid-template-columns: 120px 120px 180px 180px 180px 150px;
-  align-items: center;
-  gap: 20px;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-@media (max-width: 600px) {
-  .generator-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-
-  .generator-grid button {
-    width: 100%;
-  }
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.1);
 }

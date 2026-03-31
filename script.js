@@ -27,6 +27,7 @@
 let cash = Number(localStorage.getItem("cash")) || 0;
 let gameswon = Number(localStorage.getItem("gameswon")) || 0;
 let amountToBuy = Number(localStorage.getItem("amountToBuy")) || 1;
+
 //generators. it defines the base properties of each generator 
 // and then creates an array of generator objects that include the current state 
 // (own, cost, autocost, etc.) retrieved from localStorage or set to default values.
@@ -48,8 +49,9 @@ const baseGenerators = [
 // this worked before I began implementing the buy multiple feature
 const generators = baseGenerators.map((base, index) => ({
   ...base,
-  const: storedOwn = localStorage.getItem(`${base.key}own`),
-  own: storedOwn !== null ? Number(storedOwn) : (index === 0 ? 1 : 0),
+  own: localStorage.getItem(`${base.key}own`) !== null
+  ? Number(localStorage.getItem(`${base.key}own`))
+  : (index === 0 ? 1 : 0),
   cost: Number(localStorage.getItem(`${base.key}cost`)) || base.cost,
   inc: base.inc,
   per: base.per,
@@ -57,9 +59,11 @@ const generators = baseGenerators.map((base, index) => ({
   cooldownLength: base.cooldown,
   autoactive: Number(localStorage.getItem(`auto${base.key}`)) || 0,
   ready: Number(localStorage.getItem(`${base.key}Ready`)) || 0,
+  start: Number(localStorage.getItem(`${base.key}Start`)) || 0,
   incmult: 1,
   speedmult: 1
 }));  
+
 //max generators. If I want to change the end goal of the game, 
 // I can just change this variable and it will automatically adjust the UI and logic accordingly, 
 // since all generator-related code references the generators array which is based on the baseGenerators array.
@@ -113,6 +117,48 @@ function setmultipliers() {
     });
   });
 }
+function formatNumber(value) {
+
+  if (value >= 1000000000000)
+    return (value / 1000000000000).toFixed(2) + "T";
+
+  if (value >= 1000000000)
+    return (value / 1000000000).toFixed(2) + "B";
+
+  if (value >= 1000000)
+    return (value / 1000000).toFixed(2) + "M";
+
+  if (value >= 1000)
+    return (value / 1000).toFixed(2) + "K";
+
+  return value.toLocaleString();
+}
+
+function barProgress(){
+  const now = Date.now();
+ generators.forEach((gen, index) => {
+  if (!gen.start) return;
+  const elapsedcd = now - gen.start  
+  const total   = gen.ready - gen.start  
+  let progress = (elapsedcd / total)
+  if (progress >1)
+    progress = 1
+  const percent = progress * 100;
+  genEls[index].style.background = 
+   `linear-gradient(to bottom, rgba(255,255,255,0.25), rgba(0,0,0,0.2)),
+   linear-gradient(to right, #1de816 ${percent}%, #3333330a ${percent}%)`;
+})
+}
+
+function buyProgress(){
+  generators.forEach((gen, index) => {
+    if (gen.own === 0) return;
+    const lefttogo = gen.own < 100 ? (100 - gen.own)/100 : (((Math.floor(gen.own/1000)+1)*1000)-gen.own)/1000;
+    const percentleft = (1-lefttogo) * 100;
+    buyEls[index].style.background = `linear-gradient(to right, #e8d316 ${percentleft}%, #33333327 ${percentleft}%)`;
+  });
+}
+
 //This is the main update loop that calls all the necessary functions to keep the UI and game state in sync,
 //this is a new function i added today. unsure if it's working.
 function update() {
@@ -123,6 +169,8 @@ function update() {
   updateautos();
   disable1s();
   UpdatelocalStorage();
+  barProgress();
+  buyProgress();
 }
 setInterval(update, 100);
 //This function saves the current game state to localStorage, including cash, games won, and the state of each generator,
@@ -135,6 +183,7 @@ function UpdatelocalStorage() {
   localStorage.setItem(`${gen.key}own`, gen.own);
   localStorage.setItem(`${gen.key}cost`, gen.cost);
   localStorage.setItem(`${gen.key}Ready`, gen.ready);
+  localStorage.setItem(`${gen.key}Start`, gen.start);
   localStorage.setItem(`auto${gen.key}`, gen.autoactive);
   });
 }
@@ -143,13 +192,13 @@ function UpdatelocalStorage() {
 //This worked before I began implementing the buy multiple feature
 function createGeneratorRow(gen) {
   return `
-    <div class="generator-grid">
-      <div>${gen.name}</div>
-      <div id="${gen.key}own"></div>
-      <button id="gen${gen.key}"></button>
-      <button id="buy${gen.key}">${gen.cost}</button>
-      <button id="auto${gen.key}">${gen.autocost}</button>
-    </div>
+  <div class="generator-row">
+    <button class="btn-level" id="gen${gen.key}">${gen.name}
+    </button>
+    <div class="gen-owned" id="${gen.key}own"></div>
+    <button class="btn btn-buy" id="buy${gen.key}"></button>
+    <button class="btn btn-auto" id="auto${gen.key}"></button>
+  </div>
   `;
 }
 // it generates the HTML for all generators and inserts it into the generator area of the page.
@@ -171,6 +220,7 @@ function testGenerator(index) {
   if (now < gen.ready) return;
   cash += (gen.own * gen.per) * multiplier;
   gen.ready = now + (gen.cooldownLength * speedMultiplier);
+  gen.start = now;
 }
 //this function calculates the cost of buying a specified amount of generators based on the current cost and incremental cost,
 // which will be used when implementing the buy multiple feature to determine if the player has enough cash to make the purchase.
@@ -272,6 +322,7 @@ const buy1000El = document.getElementById("buy1000");
 //they worked before I began implementing the buy multiple feature 
 const cashEl = document.getElementById("cash");
 const gameswonEl = document.getElementById("gameswon");
+const amounttobuyEl = document.getElementById("amounttobuy");
 const reset = document.getElementById("reset");
 const ownEls = generators.map(gen =>
   document.getElementById(`${gen.key}own`));
@@ -288,16 +339,22 @@ function updateUI() {
     //own, generate, buy 1, buy 10, and automate - it updates the text content of each corresponding 
   // DOM element based on the current state of the generators.
 //this worked before I began implementing the buy multiple feature
-  cashEl.textContent = cash.toLocaleString();
+  cashEl.textContent = formatNumber(cash);
   gameswonEl.textContent = gameswon.toLocaleString();
+  amounttobuyEl.textContent = amountToBuy.toLocaleString();
   ownEls.forEach((el, index) => {
-  el.textContent = generators[index].own.toLocaleString();}); 
+  el.textContent = 
+  formatNumber(generators[index].per * generators[index].incmult * generators[index].own)
+  + " Every " +
+  ((generators[index].cooldown / 1000)* generators[index].speedmult).toFixed(1) + " s"
+  
+  ;}); 
   genEls.forEach((el, index) => {
-  el.textContent = (generators[index].per * generators[index].own * generators[index].incmult).toLocaleString();});
+  el.textContent = generators[index].name + " " + generators[index].own.toLocaleString() + " Owned";});
   buyEls.forEach((el, index) => {
-  el.textContent = buycostcalculator(index, amountToBuy).toLocaleString();});
+  el.textContent = formatNumber(buycostcalculator(index, amountToBuy));});
   autoactiveEls.forEach((el, index) => {
-  el.textContent = generators[index].autocost.toLocaleString();});
+  el.textContent = formatNumber(generators[index].autocost);});
 }
 //====Event listeners====
 //new buy multiple buttons. it adds click event listeners to each buy multiple button that set the 
