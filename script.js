@@ -33,16 +33,16 @@ let amountToBuy = Number(localStorage.getItem("amountToBuy")) || 1;
 // (own, cost, autocost, etc.) retrieved from localStorage or set to default values.
 // this worked before I began implementing the buy multiple feature
 const baseGenerators = [
-  { key: "one", name: "1s", cost: 10, inc: 1, per: 1, autocost: 100, cooldown: 1000, own: 1 },
-  { key: "two", name: "2s", cost: 50, inc: 5, per: 6, autocost: 500, cooldown: 2000, own: 0 },
-  { key: "three", name: "3s", cost: 250, inc: 25, per: 36, autocost: 2500, cooldown: 3000, own: 0 },
-  { key: "four", name: "4s", cost: 1250, inc: 125, per: 216, autocost: 12500, cooldown: 4000, own: 0 },
-  { key: "five", name: "5s", cost: 6250, inc: 625, per: 1296, autocost: 62500, cooldown: 5000, own: 0 },
-  { key: "six", name: "6s", cost: 31250, inc: 3125, per: 7776, autocost: 312500, cooldown: 6000, own: 0 },
-  { key: "seven", name: "7s", cost: 156250, inc: 15625, per: 46656, autocost: 1562500, cooldown: 7000, own: 0 },
-  { key: "eight", name: "8s", cost: 781250, inc: 78125, per: 1279936, autocost: 7812500, cooldown: 8000, own: 0 },
-  { key: "nine", name: "9s", cost: 3906250, inc: 390625, per: 8679616, autocost: 39062500, cooldown: 9000, own: 0 },
-  { key: "ten", name: "10s", cost: 19531250, inc: 1953125, per: 30077696, autocost: 195312500, cooldown: 10000, own: 0 },
+  { key: "one", name: "1s", cost: 10, inc: 1, per: 1, autocost: 1000, cooldown: 1000, own: 1 },
+  { key: "two", name: "2s", cost: 100, inc: 10, per: 11, autocost: 10000, cooldown: 2000, own: 0 },
+  { key: "three", name: "3s", cost: 1000, inc: 100, per: 121, autocost: 100000, cooldown: 3000, own: 0 },
+  { key: "four", name: "4s", cost: 10000, inc: 1000, per: 1331, autocost: 1000000, cooldown: 4000, own: 0 },
+  { key: "five", name: "5s", cost: 100000, inc: 10000, per: 14641, autocost: 10000000, cooldown: 5000, own: 0 },
+  { key: "six", name: "6s", cost: 1000000, inc: 100000, per: 161051, autocost: 100000000, cooldown: 6000, own: 0 },
+  { key: "seven", name: "7s", cost: 10000000, inc: 1000000, per: 1771561, autocost: 1000000000, cooldown: 7000, own: 0 },
+  { key: "eight", name: "8s", cost: 100000000, inc: 10000000, per: 19487171, autocost: 10000000000, cooldown: 8000, own: 0 },
+  { key: "nine", name: "9s", cost: 1000000000, inc: 100000000, per: 214358881, autocost: 100000000000, cooldown: 9000, own: 0 },
+  { key: "ten", name: "10s", cost: 10000000000, inc: 1000000000, per: 2357947691, autocost: 1000000000000, cooldown: 10000, own: 0 },
 ];
 // This creates the generators array by mapping over the baseGenerators and adding the current state properties,
 // which allows the game to persist the state of each generator across sessions using localStorage.
@@ -100,6 +100,18 @@ const multipliers = [
   { threshold: 9000, incmult: 5, speedmult: 0.5 },
   { threshold: 10000, incmult: 10, speedmult: 0.5 }
 ];
+
+const multipliers10 = [
+  {thresholdy: 1000, incmulty: 12, speedmulty: 0.5},
+  {thresholdy: 2000, incmulty: 13, speedmulty: 0.45},
+  {thresholdy: 3000, incmulty: 14, speedmulty: 0.4},
+  {thresholdy: 4000, incmulty: 15, speedmulty: 0.35},
+  {thresholdy: 5000, incmulty: 16, speedmulty: 0.3},
+  {thresholdy: 6000, incmulty: 17, speedmulty: 0.25},
+  {thresholdy: 7000, incmulty: 18, speedmulty: 0.2},
+  {thresholdy: 8000, incmulty: 19, speedmulty: 0.15},
+  {thresholdy: 9000, incmulty: 20, speedmulty: 0.1}
+]
 //This function sets the income and speed multipliers when generating cash and applying cooldowns
 //it works by looking at the owned level of the previous generator.
 
@@ -107,17 +119,35 @@ function setmultipliers() {
   generators.forEach((gen, index) => {
     gen.incmult = 1;
   gen.speedmult = 1;
-    if (index === 0) return;
+    const ten = generators[9];
+    let applied = false;
+ const gensec = generators[index];
+   multipliers10.forEach(multy => {
+     if (ten.own  >= multy.thresholdy){
+      if (multy.incmulty) gensec.incmult = multy.incmulty;
+      if (multy.speedmulty) gensec.speedmult = multy.speedmulty;
+      applied = true;
+      }
+    });
+     if (!applied) { 
     const prevGen = generators[index - 1];
+    if(index ===0) return;
     multipliers.forEach(mult => {
       if (prevGen.own >= mult.threshold) {
         if (mult.incmult) gen.incmult = mult.incmult;
         if (mult.speedmult) gen.speedmult = mult.speedmult;
-      }
+      };
     });
-  });
+  }});
 }
+
 function formatNumber(value) {
+
+if (value >= 1000000000000000000)
+    return (value / 1000000000000000000).toFixed(2) + "Qi";
+
+   if (value >= 1000000000000000)
+    return (value / 1000000000000000).toFixed(2) + "Q";
 
   if (value >= 1000000000000)
     return (value / 1000000000000).toFixed(2) + "T";
@@ -409,6 +439,11 @@ autoButtons.forEach((button, index) => {
 // I need to find a way to reset the generators owned. everything else resets finr, 
 // but the owned count stays the same, which breaks the game since you can just keep 
 // generating cash with the owned generators after resetting.
+
+reset.addEventListener("click", () => {
+  resetGame();
+});
+
 function resetGame() {
   cash = 0;
   generators.forEach((gen, index) => {
